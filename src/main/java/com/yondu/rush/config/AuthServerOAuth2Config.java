@@ -100,13 +100,13 @@ public class AuthServerOAuth2Config extends AuthorizationServerConfigurerAdapter
     public DataSourceInitializer dataSourceInitializer() {
         DataSourceInitializer initializer = new DataSourceInitializer();
         initializer.setDataSource(dataSource);
-      //  initializer.setDatabasePopulator(databasePopulator());
+        initializer.setDatabasePopulator(databasePopulator());
         return initializer;
     }
 
-   /* private DatabasePopulator databasePopulator() {
+    private DatabasePopulator databasePopulator() {
         ResourceDatabasePopulator populator = new ResourceDatabasePopulator();
         populator.addScript(schemaScript);
         return populator;
-    }*/
+    }
 }
