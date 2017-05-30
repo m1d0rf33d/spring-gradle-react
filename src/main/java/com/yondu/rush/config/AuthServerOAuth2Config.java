@@ -20,8 +20,9 @@ import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 
 import javax.sql.DataSource;
 
-/**
- * Created by aomine on 10/20/16.
+/** This is the Authorization Server :)
+ *
+ *  @author m1d0rf33d
  */
 @Configuration
 @EnableAuthorizationServer
@@ -36,10 +37,6 @@ public class AuthServerOAuth2Config extends AuthorizationServerConfigurerAdapter
 
     @Value("classpath:schema.sql")
     private Resource schemaScript;
-
-    public AuthServerOAuth2Config() {
-        String x = "";
-    }
 
     @Override
     public void configure(
@@ -96,6 +93,7 @@ public class AuthServerOAuth2Config extends AuthorizationServerConfigurerAdapter
     public TokenStore tokenStore() {
         return new JdbcTokenStore(dataSource);
     }
+
     @Bean
     public DataSourceInitializer dataSourceInitializer() {
         DataSourceInitializer initializer = new DataSourceInitializer();

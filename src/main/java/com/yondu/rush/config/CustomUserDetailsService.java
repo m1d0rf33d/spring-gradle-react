@@ -36,6 +36,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(final String login) {
         String lowercaseLogin = login.toLowerCase();
         Optional<User> userFromDatabase =  userRepository.findOneByUsername(lowercaseLogin);
+
         return userFromDatabase.map(user -> {
             List<UserRole> userRoles = userRoleRepository.findByUser(user);
             List<Role> roles = new ArrayList<>();
