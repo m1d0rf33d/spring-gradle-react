@@ -41,4 +41,5 @@ dependencies {
 
 war {
 	baseName = 'rush'
+	zip64 true
 }
