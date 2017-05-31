@@ -13146,6 +13146,10 @@ var _actions = __webpack_require__(121);
 
 var _reactRouter = __webpack_require__(9);
 
+var _axios = __webpack_require__(128);
+
+var _axios2 = _interopRequireDefault(_axios);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -13164,10 +13168,48 @@ var LoginComponent = function (_Component) {
 	}
 
 	_createClass(LoginComponent, [{
+		key: 'getInitialState',
+		value: function getInitialState() {
+			return { username: '', password: '' };
+		}
+	}, {
+		key: 'handleInputChange',
+		value: function handleInputChange(e) {
+			if (e.target.id == 'username-input') {
+				this.setState({ 'username': e.target.value });
+			} else {
+				this.setState({ 'password': e.target.value });
+			}
+		}
+	}, {
+		key: 'login',
+		value: function login() {
+
+			var username = this.state.username,
+			    password = this.state.password;
+
+			var authOptions = {
+				method: 'POST',
+				url: '/rush/oauth/token?grant_type=password&username=' + username + '&password=' + password + '&client_id=taf',
+				data: {},
+				headers: {
+					'Authorization': 'Basic dGFmOnRhZl9zZWNyZXQ=',
+					'Content-Type': 'application/json'
+				},
+				json: true
+			};
+
+			var tref = this;
+
+			(0, _axios2.default)(authOptions).then(function (response) {
+				tref.props.updateLoginState(true);
+			}).catch(function (error) {
+				alert(error);
+			});
+		}
+	}, {
 		key: 'render',
 		value: function render() {
-			var _this2 = this;
-
 			return this.props.loginState ? _react2.default.createElement(_reactRouter.Redirect, { to: '/' }) : _react2.default.createElement(
 				'div',
 				{ className: 'login_wrapper' },
@@ -13182,7 +13224,7 @@ var LoginComponent = function (_Component) {
 					_react2.default.createElement(
 						'div',
 						{ className: 'col-xs-6' },
-						_react2.default.createElement('input', { type: 'text' })
+						_react2.default.createElement('input', { type: 'text', id: 'username-input', onChange: this.handleInputChange.bind(this) })
 					)
 				),
 				_react2.default.createElement('br', null),
@@ -13197,15 +13239,13 @@ var LoginComponent = function (_Component) {
 					_react2.default.createElement(
 						'div',
 						{ className: 'col-xs-6' },
-						_react2.default.createElement('input', { type: 'password' })
+						_react2.default.createElement('input', { type: 'password', id: 'password-input', onChange: this.handleInputChange.bind(this) })
 					)
 				),
 				_react2.default.createElement('br', null),
 				_react2.default.createElement(
 					'button',
-					{ onClick: function onClick() {
-							return _this2.props.updateLoginState(true);
-						} },
+					{ onClick: this.login.bind(this) },
 					'Login'
 				)
 			);
