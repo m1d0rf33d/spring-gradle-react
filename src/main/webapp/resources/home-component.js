@@ -15,8 +15,8 @@ class HomeComponent extends Component {
 		  }*/ 
 	
 	render() {
-		if (this.props.activeUser != null && this.props.activeUser != true) {
-			return (<ReactRedirect location="http://localhost:8000/#/login"></ReactRedirect>);
+		if (window.localStorage.getItem('auth') != 'true') {
+			return (<ReactRedirect location="http://localhost:8080/rush/#/login"></ReactRedirect>);
 		} else {
 			return (
 					<div> 

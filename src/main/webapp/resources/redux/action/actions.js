@@ -8,6 +8,7 @@ export const selectUser = (user) => {
 
 
 export const activateUser = (payload) => {
+    window.localStorage.setItem('auth', 'true');
     return {
         type: 'ACTIVATE_USER',
         payload: payload

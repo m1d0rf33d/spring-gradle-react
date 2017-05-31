@@ -86,3 +86,6 @@ log.txt
 *.sass
 *.MF
 
+
+
+classes/**
