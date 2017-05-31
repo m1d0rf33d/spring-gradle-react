@@ -7,11 +7,15 @@ export const selectUser = (user) => {
 };
 
 
-export const activateUser = (payload) => {
-    window.localStorage.setItem('auth', 'true');
+export const updateLoginState = (payload) => {
+
+    window.localStorage.setItem('auth', payload);
+
+
     return {
-        type: 'ACTIVATE_USER',
+        type: 'UPDATE_LOGIN_STATE',
         payload: payload
     }
 };
+
 

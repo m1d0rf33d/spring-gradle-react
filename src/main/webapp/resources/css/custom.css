@@ -5,3 +5,32 @@
 	 width: 40%;
 	 padding: 10px;
 }
+
+.sidebar-container {
+	margin-top: 49px;
+}
+
+
+.container-fluid {
+	background-color: #23282e;
+	color: white;
+}
+.navbar-header {
+	height: 50px;
+}
+
+.nav-header-lbl {
+	display: inline-block;
+	margin-top: 12%;
+}
+
+.nav-container {
+	margin-top: -1px;
+	margin-left: -1px;
+	margin-right: -1px;
+}
+
+.logout-link {
+	color: white !important;
+	display: inline-block;
+}

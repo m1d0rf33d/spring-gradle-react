@@ -12863,10 +12863,12 @@ var selectUser = exports.selectUser = function selectUser(user) {
     };
 };
 
-var activateUser = exports.activateUser = function activateUser(payload) {
-    window.localStorage.setItem('auth', 'true');
+var updateLoginState = exports.updateLoginState = function updateLoginState(payload) {
+
+    window.localStorage.setItem('auth', payload);
+
     return {
-        type: 'ACTIVATE_USER',
+        type: 'UPDATE_LOGIN_STATE',
         payload: payload
     };
 };
@@ -12928,7 +12930,7 @@ var App = function (_Component) {
         value: function render() {
             return _react2.default.createElement(
                 _reactRouterDom.HashRouter,
-                null,
+                { history: '{hashHistory}' },
                 _react2.default.createElement(
                     'div',
                     null,
@@ -12974,7 +12976,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var ParentReducer = (0, _redux.combineReducers)({
     users: _userReducer2.default,
-    activeUser: _reducerActiveUser2.default
+    loginState: _reducerActiveUser2.default
 });
 
 exports.default = ParentReducer;
@@ -13014,6 +13016,14 @@ var _reactRedirect = __webpack_require__(246);
 
 var _reactRedirect2 = _interopRequireDefault(_reactRedirect);
 
+var _navComponent = __webpack_require__(314);
+
+var _navComponent2 = _interopRequireDefault(_navComponent);
+
+var _sidebarComponent = __webpack_require__(315);
+
+var _sidebarComponent2 = _interopRequireDefault(_sidebarComponent);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -13049,8 +13059,8 @@ var HomeComponent = function (_Component) {
 				return _react2.default.createElement(
 					'div',
 					null,
-					_react2.default.createElement(_userList2.default, null),
-					_react2.default.createElement(_userDetails2.default, null)
+					_react2.default.createElement(_navComponent2.default, null),
+					_react2.default.createElement(_sidebarComponent2.default, null)
 				);
 			}
 		}
@@ -13134,6 +13144,8 @@ var _reactRedux = __webpack_require__(25);
 
 var _actions = __webpack_require__(121);
 
+var _reactRouter = __webpack_require__(9);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -13156,7 +13168,7 @@ var LoginComponent = function (_Component) {
 		value: function render() {
 			var _this2 = this;
 
-			return _react2.default.createElement(
+			return this.props.loginState ? _react2.default.createElement(_reactRouter.Redirect, { to: '/' }) : _react2.default.createElement(
 				'div',
 				{ className: 'login_wrapper' },
 				_react2.default.createElement(
@@ -13192,16 +13204,9 @@ var LoginComponent = function (_Component) {
 				_react2.default.createElement(
 					'button',
 					{ onClick: function onClick() {
-							return _this2.props.activateUser(true);
+							return _this2.props.updateLoginState(true);
 						} },
-					'Activate'
-				),
-				_react2.default.createElement(
-					'button',
-					{ onClick: function onClick() {
-							return _this2.props.activateUser(false);
-						} },
-					'Logout'
+					'Login'
 				)
 			);
 		}
@@ -13216,14 +13221,14 @@ var LoginComponent = function (_Component) {
 
 function mapStateToProps(state) {
 	return {
-		users: state.users
+		loginState: state.loginState
 	};
 }
 
 //Get actions and pass them as props to to UserList
 //> now UserList has this.props.selectUser
 function matchDispatchToProps(dispatch) {
-	return (0, _redux.bindActionCreators)({ activateUser: _actions.activateUser }, dispatch);
+	return (0, _redux.bindActionCreators)({ updateLoginState: _actions.updateLoginState }, dispatch);
 }
 
 //We don't want to return the plain UserList (component) anymore, we want to return the smart Container
@@ -30624,6 +30629,9 @@ exports.default = function (state, action) {
     case 'ACTIVATE_USER':
       return action.payload;
       break;
+    case 'UPDATE_LOGIN_STATE':
+      return action.payload;
+      break;
   }
   return state;
 };
@@ -32662,6 +32670,373 @@ var toString = {}.toString;
 module.exports = Array.isArray || function (arr) {
   return toString.call(arr) == '[object Array]';
 };
+
+/***/ }),
+/* 314 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(4);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRouter = __webpack_require__(9);
+
+var _actions = __webpack_require__(121);
+
+var _redux = __webpack_require__(26);
+
+var _reactRedux = __webpack_require__(25);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var NavComponent = function (_Component) {
+    _inherits(NavComponent, _Component);
+
+    function NavComponent() {
+        _classCallCheck(this, NavComponent);
+
+        return _possibleConstructorReturn(this, (NavComponent.__proto__ || Object.getPrototypeOf(NavComponent)).apply(this, arguments));
+    }
+
+    _createClass(NavComponent, [{
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+
+            this.props.updateLoginState(window.localStorage.getItem('auth'));
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var _this2 = this;
+
+            return this.props.loginState ? _react2.default.createElement(
+                'div',
+                { className: 'nav-container' },
+                _react2.default.createElement(
+                    'nav',
+                    { className: 'navbar navbar-default' },
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'container-fluid' },
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'navbar-header' },
+                            _react2.default.createElement(
+                                'label',
+                                { className: 'nav-header-lbl' },
+                                'Rush POS Sync'
+                            )
+                        ),
+                        _react2.default.createElement(
+                            'ul',
+                            { className: 'nav navbar-nav navbar-right' },
+                            _react2.default.createElement(
+                                'li',
+                                null,
+                                _react2.default.createElement(
+                                    'a',
+                                    { onClick: function onClick() {
+                                            return _this2.props.updateLoginState(false);
+                                        }, className: 'logout-link', href: '#' },
+                                    'Logout'
+                                )
+                            )
+                        )
+                    )
+                )
+            ) : _react2.default.createElement(_reactRouter.Redirect, { to: '/login' });
+        }
+    }]);
+
+    return NavComponent;
+}(_react.Component);
+//Get apps state and pass it as props to UserList
+//> whenever state changes, the UserList will automatically re-render
+
+
+function mapStateToProps(state) {
+    return {
+        loginState: state.loginState
+    };
+}
+
+//Get actions and pass them as props to to UserList
+//> now UserList has this.props.selectUser
+function matchDispatchToProps(dispatch) {
+    return (0, _redux.bindActionCreators)({ updateLoginState: _actions.updateLoginState }, dispatch);
+}
+
+//We don't want to return the plain UserList (component) anymore, we want to return the smart Container
+//> UserList is now aware of state and actions
+exports.default = (0, _reactRedux.connect)(mapStateToProps, matchDispatchToProps)(NavComponent);
+
+/***/ }),
+/* 315 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(4);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var SidebarComponent = function (_Component) {
+    _inherits(SidebarComponent, _Component);
+
+    function SidebarComponent() {
+        _classCallCheck(this, SidebarComponent);
+
+        return _possibleConstructorReturn(this, (SidebarComponent.__proto__ || Object.getPrototypeOf(SidebarComponent)).apply(this, arguments));
+    }
+
+    _createClass(SidebarComponent, [{
+        key: "render",
+        value: function render() {
+            return _react2.default.createElement(
+                "div",
+                { className: "nav-side-menu sidebar-container" },
+                _react2.default.createElement("i", { className: "fa fa-bars fa-2x toggle-btn", "data-toggle": "collapse", "data-target": "#menu-content" }),
+                _react2.default.createElement(
+                    "div",
+                    { className: "menu-list" },
+                    _react2.default.createElement(
+                        "ul",
+                        { classID: "menu-content", className: "menu-content collapse out" },
+                        _react2.default.createElement(
+                            "li",
+                            null,
+                            _react2.default.createElement(
+                                "a",
+                                { href: "#" },
+                                _react2.default.createElement("i", { className: "fa fa-dashboard fa-lg" }),
+                                " Dashboard"
+                            )
+                        ),
+                        _react2.default.createElement(
+                            "li",
+                            { "data-toggle": "collapse", "data-target": "#products", className: "collapsed active" },
+                            _react2.default.createElement(
+                                "a",
+                                { href: "#" },
+                                _react2.default.createElement("i", { className: "fa fa-gift fa-lg" }),
+                                " UI Elements ",
+                                _react2.default.createElement("span", { className: "arrow" })
+                            )
+                        ),
+                        _react2.default.createElement(
+                            "ul",
+                            { className: "sub-menu collapse", classID: "products" },
+                            _react2.default.createElement(
+                                "li",
+                                { className: "active" },
+                                _react2.default.createElement(
+                                    "a",
+                                    { href: "#" },
+                                    "CSS3 Animation"
+                                )
+                            ),
+                            _react2.default.createElement(
+                                "li",
+                                null,
+                                _react2.default.createElement(
+                                    "a",
+                                    { href: "#" },
+                                    "General"
+                                )
+                            ),
+                            _react2.default.createElement(
+                                "li",
+                                null,
+                                _react2.default.createElement(
+                                    "a",
+                                    { href: "#" },
+                                    "Buttons"
+                                )
+                            ),
+                            _react2.default.createElement(
+                                "li",
+                                null,
+                                _react2.default.createElement(
+                                    "a",
+                                    { href: "#" },
+                                    "Tabs & Accordions"
+                                )
+                            ),
+                            _react2.default.createElement(
+                                "li",
+                                null,
+                                _react2.default.createElement(
+                                    "a",
+                                    { href: "#" },
+                                    "Typography"
+                                )
+                            ),
+                            _react2.default.createElement(
+                                "li",
+                                null,
+                                _react2.default.createElement(
+                                    "a",
+                                    { href: "#" },
+                                    "FontAwesome"
+                                )
+                            ),
+                            _react2.default.createElement(
+                                "li",
+                                null,
+                                _react2.default.createElement(
+                                    "a",
+                                    { href: "#" },
+                                    "Slider"
+                                )
+                            ),
+                            _react2.default.createElement(
+                                "li",
+                                null,
+                                _react2.default.createElement(
+                                    "a",
+                                    { href: "#" },
+                                    "Panels"
+                                )
+                            ),
+                            _react2.default.createElement(
+                                "li",
+                                null,
+                                _react2.default.createElement(
+                                    "a",
+                                    { href: "#" },
+                                    "Widgets"
+                                )
+                            ),
+                            _react2.default.createElement(
+                                "li",
+                                null,
+                                _react2.default.createElement(
+                                    "a",
+                                    { href: "#" },
+                                    "Bootstrap Model"
+                                )
+                            )
+                        ),
+                        _react2.default.createElement(
+                            "li",
+                            { "data-toggle": "collapse", "data-target": "#service", className: "collapsed" },
+                            _react2.default.createElement(
+                                "a",
+                                { href: "#" },
+                                _react2.default.createElement("i", { className: "fa fa-globe fa-lg" }),
+                                " Services ",
+                                _react2.default.createElement("span", { className: "arrow" })
+                            )
+                        ),
+                        _react2.default.createElement(
+                            "ul",
+                            { className: "sub-menu collapse", classID: "service" },
+                            _react2.default.createElement(
+                                "li",
+                                null,
+                                "New Service 1"
+                            ),
+                            _react2.default.createElement(
+                                "li",
+                                null,
+                                "New Service 2"
+                            ),
+                            _react2.default.createElement(
+                                "li",
+                                null,
+                                "New Service 3"
+                            )
+                        ),
+                        _react2.default.createElement(
+                            "li",
+                            { "data-toggle": "collapse", "data-target": "#new", className: "collapsed" },
+                            _react2.default.createElement(
+                                "a",
+                                { href: "#" },
+                                _react2.default.createElement("i", { className: "fa fa-car fa-lg" }),
+                                " New ",
+                                _react2.default.createElement("span", { className: "arrow" })
+                            )
+                        ),
+                        _react2.default.createElement(
+                            "ul",
+                            { className: "sub-menu collapse", classID: "new" },
+                            _react2.default.createElement(
+                                "li",
+                                null,
+                                "New New 1"
+                            ),
+                            _react2.default.createElement(
+                                "li",
+                                null,
+                                "New New 2"
+                            ),
+                            _react2.default.createElement(
+                                "li",
+                                null,
+                                "New New 3"
+                            )
+                        ),
+                        _react2.default.createElement(
+                            "li",
+                            null,
+                            _react2.default.createElement(
+                                "a",
+                                { href: "#" },
+                                _react2.default.createElement("i", { className: "fa fa-user fa-lg" }),
+                                " Profile"
+                            )
+                        ),
+                        _react2.default.createElement(
+                            "li",
+                            null,
+                            _react2.default.createElement(
+                                "a",
+                                { href: "#" },
+                                _react2.default.createElement("i", { className: "fa fa-users fa-lg" }),
+                                " Users"
+                            )
+                        )
+                    )
+                )
+            );
+        }
+    }]);
+
+    return SidebarComponent;
+}(_react.Component);
+
+exports.default = SidebarComponent;
 
 /***/ })
 /******/ ]);

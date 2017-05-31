@@ -4,7 +4,7 @@ import UserActiveReducer from './reducer-active-user.js';
 
 const ParentReducer  = combineReducers({
     users: UserReducer,
-    activeUser: UserActiveReducer
+    loginState: UserActiveReducer
 });
 
 export default ParentReducer

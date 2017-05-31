@@ -12,6 +12,9 @@ export default function (state, action) {
         case 'ACTIVATE_USER':
         	return action.payload;
         	break;
+		case 'UPDATE_LOGIN_STATE':
+			return action.payload;
+			break;
     }
     return state;
 }

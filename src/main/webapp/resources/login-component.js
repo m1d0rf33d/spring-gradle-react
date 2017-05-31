@@ -1,13 +1,15 @@
 import React, {Component} from 'react'
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {activateUser} from './redux/action/actions.js'
+import {updateLoginState} from './redux/action/actions.js'
+import {Redirect} from 'react-router'
 
 class LoginComponent extends Component {
 	
 	render() {
 	
 		return (
+			this.props.loginState ? <Redirect to="/"/> :
 				<div className="login_wrapper">
 					<div className="row">
 						<div className="col-xs-3">Username: </div>
@@ -23,8 +25,7 @@ class LoginComponent extends Component {
 						</div>
 					</div>
 					<br/>
-					<button onClick={() => this.props.activateUser(true)}>Activate</button>
-					<button onClick={() => this.props.activateUser(false)}>Logout</button>
+					<button onClick={() => this.props.updateLoginState(true)}>Login</button>
 				</div>
 			
 		);
@@ -37,14 +38,14 @@ class LoginComponent extends Component {
 //> whenever state changes, the UserList will automatically re-render
 function mapStateToProps(state) {
 return {
-users: state.users
+	loginState: state.loginState
 };
 }
 
 //Get actions and pass them as props to to UserList
 //> now UserList has this.props.selectUser
 function matchDispatchToProps(dispatch){
-return bindActionCreators({activateUser: activateUser}, dispatch);
+return bindActionCreators({updateLoginState: updateLoginState}, dispatch);
 }
 
 //We don't want to return the plain UserList (component) anymore, we want to return the smart Container

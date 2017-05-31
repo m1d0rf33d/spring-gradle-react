@@ -4,6 +4,8 @@ import UserDetail from './redux/container/user-details.js'
 import axios from 'axios'
 import {connect} from 'react-redux'
 import ReactRedirect from 'react-redirect'
+import NavComponent from './component/nav-component'
+import SidebarComponent from './component/sidebar-component'
 
 class HomeComponent extends Component {
 
@@ -20,8 +22,8 @@ class HomeComponent extends Component {
 		} else {
 			return (
 					<div> 
-						<UserList/>
-						<UserDetail/>
+						<NavComponent/>
+						<SidebarComponent/>
 					</div>
 				);
 		
